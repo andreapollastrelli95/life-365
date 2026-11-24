@@ -11,7 +11,7 @@ const BASE = process.env.BASE ?? "http://127.0.0.1:3310";
 const CLOUD = Boolean(process.env.UTENTE_A);
 const [A, B] = [process.env.UTENTE_A, process.env.UTENTE_B].map((u) => u && { email: u.split(":")[0], pwd: u.split(":").slice(1).join(":") });
 let ok = 0, ko = 0;
-const check = (name, cond, extra = "") => { cond ? ok++ : ko++; console.log(cond ? "OK  " : "FAIL", name, extra); };
+const check = (name, cond, extra = "") => { if (cond) ok++; else ko++; console.log(cond ? "OK  " : "FAIL", name, extra); };
 
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 const problemi = [];
