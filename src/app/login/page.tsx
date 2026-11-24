@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { entraDemoAction } from "@/app/auth-actions";
 import { Logo } from "@/components/Logo";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { CLOUD_ENABLED } from "@/lib/supabase/config";
@@ -106,10 +105,9 @@ export default function LoginPage() {
           {modo === "recupera" && <button type="button" className="text-muted underline" onClick={() => cambia("accedi")}>Torna all&apos;accesso</button>}
         </div>
 
-        <form action={entraDemoAction} className="border-t border-line pt-4">
-          <button type="submit" className="btn w-full">Prova la demo senza account</button>
-          <p className="mt-2 text-center text-xs text-muted">Dati inventati, nessuna modifica viene salvata.</p>
-        </form>
+        <p className="border-t border-line pt-4 text-center text-xs text-muted">
+          Un solo account per tutti i tuoi dispositivi: i dati si sincronizzano su telefono, tablet e computer.
+        </p>
       </div>
     </main>
   );

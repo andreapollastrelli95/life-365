@@ -84,7 +84,6 @@ export function UploadCard({ fixedDestinazione }: { fixedDestinazione?: string }
   const submit = async () => {
     if (files.length === 0) return notify("error", "Scegli almeno un file.");
     if (!dest) return notify("error", "Scegli dove deve andare il file.");
-    if (sessione.modo === "demo") return notify("error", "Nella demo i file non vengono salvati. Crea un account per caricare i tuoi documenti.");
     setBusy(true);
     try {
       const result = sessione.modo === "cloud"
@@ -181,7 +180,6 @@ export function UploadCard({ fixedDestinazione }: { fixedDestinazione?: string }
               {dest?.crea === "documenti"
                 ? "Crea una scheda in Documenti: numero e scadenza si completano lì."
                 : sessione.modo === "cloud" ? "I file vanno nel tuo spazio privato: li vedi solo tu."
-                : sessione.modo === "demo" ? "Nella demo i file non vengono salvati."
                 : "I file restano sul tuo PC, nella cartella data\\allegati."}
             </p>
             <button type="button" className="btn btn-primary" disabled={busy || files.length === 0 || !dest} onClick={submit}>

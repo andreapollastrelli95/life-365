@@ -1,7 +1,7 @@
 // Prova nel browser (Edge) di LIFE 365.
 //   Locale: BASE=http://127.0.0.1:3310 node tests/e2e/prova.mjs
 //   Cloud:  BASE=https://... UTENTE_A=email:password UTENTE_B=email:password node tests/e2e/prova.mjs
-// Nel cloud verifica accesso, demo in sola lettura, salvataggio, file e SEPARAZIONE tra due utenti.
+// Nel cloud verifica accesso obbligatorio, salvataggio, file, sincronizzazione e SEPARAZIONE tra due utenti.
 import { chromium } from "playwright-core";
 import { writeFileSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -84,18 +84,7 @@ if (CLOUD) {
   check("senza accesso si va al login", anon.page.url().includes("/login"));
   const r = await anon.page.request.get(BASE + "/api/export", { maxRedirects: 0 });
   check("export protetto senza accesso", r.status() === 307 || r.status() === 302, String(r.status()));
-
-  // Demo in sola lettura
-  await anon.page.getByRole("button", { name: "Prova la demo senza account" }).click();
-  await anon.page.waitForURL((u) => !u.pathname.startsWith("/login"));
-  check("demo: dashboard con dati di esempio", await anon.page.getByText("DEMO").first().isVisible());
-  await go(anon.page, "/documenti");
-  await anon.page.getByRole("button", { name: "Aggiungi" }).first().click();
-  await modal(anon.page).getByLabel("Titolo").fill("Non deve salvarsi");
-  await modal(anon.page).getByLabel("Categoria").selectOption("Altri");
-  await modal(anon.page).getByRole("button", { name: "Salva" }).click();
-  await modal(anon.page).getByText("non vengono salvate").waitFor({ timeout: 15000 });
-  check("demo: il salvataggio viene rifiutato", true);
+  check("nessuna demo nella pagina di accesso", (await anon.page.getByText(/demo/i).count()) === 0);
   await anon.ctx.close();
 
   // Utente A: archivio vuoto, salva, carica un file

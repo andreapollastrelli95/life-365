@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { deleteRecord, patchRecord, resetDemoData, saveRecord } from "@/lib/data";
 import { deleteAllegato, registraCaricati, type FileCaricato, type UploadOptions } from "@/lib/data/allegati";
-import { DemoError } from "@/lib/data/sessione";
 import { COLLECTION_KEYS, type CollectionKey } from "@/lib/types";
 import { COLLECTIONS } from "@/modules/collections";
 import { parseRecord, type FormValues } from "@/modules/engine";
@@ -25,7 +24,6 @@ async function guarded(fn: () => Promise<ActionResult>): Promise<ActionResult> {
   try {
     return await fn();
   } catch (err) {
-    if (err instanceof DemoError) return { ok: false, error: err.message };
     console.error(err);
     return { ok: false, error: GENERIC_ERROR };
   }

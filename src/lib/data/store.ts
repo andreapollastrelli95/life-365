@@ -4,7 +4,7 @@ import path from "node:path";
 import { todayISO } from "@/lib/domain/dates";
 import { COLLECTION_KEYS, type Db } from "@/lib/types";
 import { createEmpty, createSeed } from "./seed";
-import { AccessoRichiestoError, DemoError, getSessione, type Sessione } from "./sessione";
+import { AccessoRichiestoError, getSessione, type Sessione } from "./sessione";
 
 /**
  * Archivio di LIFE 365. Due persistenze dietro la stessa interfaccia:
@@ -123,7 +123,6 @@ export async function readDb(): Promise<Db> {
   switch (s.modo) {
     case "locale": return readFileDb();
     case "cloud": return (await readCloudRow(s)).db;
-    case "demo": return createSeed(todayISO());
     case "anonimo": throw new AccessoRichiestoError();
   }
 }
@@ -145,7 +144,6 @@ export async function withDb<T>(fn: (db: Db) => { db?: Db; result: T }): Promise
         // Un'altra scheda o dispositivo ha salvato nel frattempo: si riapplica sui dati nuovi.
         if (tentativo >= MAX_TENTATIVI) throw new Error("Salvataggio in conflitto con un altro dispositivo. Riprova.");
       }
-    case "demo": throw new DemoError();
     case "anonimo": throw new AccessoRichiestoError();
   }
 }
@@ -161,12 +159,13 @@ export async function resetDb(tipo: "demo" | "vuoto" = "demo"): Promise<void> {
         await writeFileAtomic(nuovo());
       });
     case "cloud": {
+      // Nel cloud niente dati inventati: si può solo ripartire da un archivio vuoto.
+      if (tipo === "demo") throw new Error("Dati di esempio non disponibili negli account.");
       const { db, versione } = await readCloudRow(s);
       await backupCloud(s, db);
       if (!(await writeCloudRow(s, nuovo(), versione))) throw new Error("Archivio modificato nel frattempo. Riprova.");
       return;
     }
-    case "demo": throw new DemoError();
     case "anonimo": throw new AccessoRichiestoError();
   }
 }

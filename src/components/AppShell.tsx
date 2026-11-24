@@ -47,18 +47,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { db, sessione } = useData();
   const demo = isDemo(db);
   const nome = sessione.modo === "cloud" ? sessione.email ?? "Account"
-    : sessione.modo === "demo" ? "Ospite demo" : db.meta.profilo?.nome ?? "Profilo demo";
-  const sottotitolo = sessione.modo === "cloud" ? "Account personale" : sessione.modo === "demo" ? "Senza account" : "Installazione locale";
+    : db.meta.profilo?.nome ?? "Profilo locale";
+  const sottotitolo = sessione.modo === "cloud" ? "Sincronizzato su tutti i dispositivi" : "Installazione locale";
   const iniziali = nome.split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <div className="flex h-dvh flex-col">
-      {sessione.modo === "demo" ? (
-        <div role="status" className="shrink-0 bg-warn px-4 py-1.5 text-center text-xs font-semibold tracking-wide text-white sm:text-sm">
-          DEMO – dati inventati, le modifiche non vengono salvate ·{" "}
-          <form action={esciAction} className="inline"><button type="submit" className="cursor-pointer underline">Crea il tuo account</button></form>
-        </div>
-      ) : demo ? (
+      {demo ? (
         <div role="status" className="shrink-0 bg-warn px-4 py-1.5 text-center text-xs font-semibold tracking-wide text-white sm:text-sm">
           Dati di esempio · puoi svuotare l&apos;archivio da Impostazioni
         </div>
@@ -112,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </span>
               {sessione.modo !== "locale" && (
                 <form action={esciAction}>
-                  <button type="submit" className="btn-icon" title={sessione.modo === "demo" ? "Esci dalla demo" : "Esci"} aria-label={sessione.modo === "demo" ? "Esci dalla demo" : "Esci"}>
+                  <button type="submit" className="btn-icon" title="Esci" aria-label="Esci">
                     <LogOut className="size-4" aria-hidden />
                   </button>
                 </form>

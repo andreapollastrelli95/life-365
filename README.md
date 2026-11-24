@@ -2,7 +2,7 @@
 
 Gestionale personale in italiano per tenere in ordine, tutto l'anno, finanze, documenti, casa, auto, salute, abbonamenti, agenda e scadenze.
 
-**Sito:** https://life-365-app.vercel.app · crea un account gratuito oppure **prova la demo** senza registrarti (dati inventati, nulla viene salvato).
+**Sito:** https://life-365-app.vercel.app · si entra solo con un account (e-mail e password). Lo stesso account funziona su qualsiasi dispositivo e i dati restano sincronizzati.
 
 ## Cosa fa
 
@@ -23,7 +23,7 @@ Next.js 16 (App Router), TypeScript, Tailwind, Recharts, React Hook Form e Zod. 
 | | Modalità cloud | Modalità locale |
 |---|---|---|
 | Quando | `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` impostate | variabili assenti |
-| Accesso | account Supabase (e-mail e password) + demo senza account | nessun login, solo sul PC |
+| Accesso | login obbligatorio con account Supabase (e-mail e password) | nessun login, solo sul PC |
 | Archivio | tabella `life365_archivio`, una riga per utente, protetta da RLS | file `data/lifeos.json` |
 | File | bucket privato `life365-allegati`, cartella per utente | cartella `data/allegati` |
 

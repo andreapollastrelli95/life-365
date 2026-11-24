@@ -8,7 +8,7 @@ import { BUCKET_ALLEGATI } from "@/lib/supabase/config";
 import type { Allegato, Documento } from "@/lib/types";
 import { readDb, withDb } from "./store";
 import type { Result } from "./index";
-import { DemoError, getSessione } from "./sessione";
+import { getSessione } from "./sessione";
 
 // In locale i file stanno in `data/allegati` (fuori da Git); nel cloud nel bucket privato,
 // dentro la cartella dell'utente. `Allegato.file` è il nome su disco o il percorso nel bucket.
@@ -100,7 +100,6 @@ export async function addAllegati(files: File[], opt: UploadOptions): Promise<Up
  */
 export async function registraCaricati(files: FileCaricato[], opt: UploadOptions): Promise<UploadResult> {
   const s = await getSessione();
-  if (s.modo === "demo") throw new DemoError();
   if (s.modo !== "cloud") return { ok: false, error: "Caricamento non disponibile in questa modalità." };
   if (!DESTINAZIONI.some((d) => d.slug === opt.destinazione)) return { ok: false, error: "Scegli dove deve andare il file." };
   const invalid = checkFiles(files.map((f) => ({ name: f.nome, size: f.dimensione })));

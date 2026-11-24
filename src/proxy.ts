@@ -1,10 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { CLOUD_ENABLED, DEMO_COOKIE, SUPABASE_KEY, SUPABASE_URL } from "@/lib/supabase/config";
+import { CLOUD_ENABLED, SUPABASE_KEY, SUPABASE_URL } from "@/lib/supabase/config";
 
 /**
  * Proxy (ex middleware, Next 16). In modalità cloud rinnova la sessione Supabase e manda a
- * /login chi non è autenticato e non ha aperto la demo. È un controllo di comodo: la protezione
+ * /login chi non è autenticato. È un controllo di comodo: la protezione
  * vera dei dati è la RLS di Supabase. In modalità locale non fa nulla.
  */
 export async function proxy(request: NextRequest) {
@@ -24,9 +24,8 @@ export async function proxy(request: NextRequest) {
 
   const { data } = await supabase.auth.getUser();
   const isLogin = request.nextUrl.pathname.startsWith("/login");
-  const demo = request.cookies.get(DEMO_COOKIE)?.value === "1";
 
-  if (!data.user && !demo && !isLogin) {
+  if (!data.user && !isLogin) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = "";

@@ -142,9 +142,9 @@ def fronte(c, url):
 
     righe = [
         ("Gratis", "crea il tuo account con e-mail e password"),
-        ("Prova la demo", "subito, senza registrarti: dati inventati"),
+        ("Sincronizzato", "stessi dati su telefono, tablet e computer"),
         ("Privato", "ogni account vede soltanto i propri dati"),
-        ("Ovunque", "su telefono e computer, anche dalla schermata Home"),
+        ("Ovunque", "accedi da qualsiasi dispositivo, anche dalla schermata Home"),
     ]
     y0 = H / 2 - 68 * mm
     for i, (titolo, testo) in enumerate(righe):
@@ -177,7 +177,7 @@ FUNZIONI = [
     ("Il mio anno", "Il riepilogo dell'anno scelto, confrontato con l'anno precedente."),
     ("Assistente", "Risposte immediate su spese, risparmio, abbonamenti e documenti in scadenza, calcolate sui tuoi dati."),
     ("Ricerca e tabelle", "Ricerca in tutti i moduli; in ogni tabella filtri, ordinamento, inserimento e modifica."),
-    ("I tuoi dati", "Esportali quando vuoi in un file. Puoi partire dai dati di esempio o da un archivio vuoto."),
+    ("Un account, ogni dispositivo", "Accedi con e-mail e password: i dati restano sincronizzati ovunque. Esportali quando vuoi."),
 ]
 
 
@@ -231,7 +231,7 @@ def retro(c, url):
     c.drawString(sinistra + 5 * mm, base + 23 * mm, "Come iniziare")
     passi = [
         "1. Inquadra il QR o apri " + url.replace("https://", ""),
-        "2. Prova la demo, oppure crea un account gratuito",
+        "2. Crea il tuo account gratuito con e-mail e password",
         "3. Telefono: Condividi › Aggiungi alla schermata Home",
     ]
     c.setFont("Testo", 10.5)

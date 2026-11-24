@@ -48,14 +48,13 @@ export default function ImpostazioniPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Section title={cloud ? "Account" : "Profilo"}>
           <dl className="space-y-1.5 text-sm">
-            {cloud ? riga("E-mail", sessione.email) : riga("Nome", profilo?.nome ?? (sessione.modo === "demo" ? "Ospite demo" : "Profilo demo"))}
+            {cloud ? riga("E-mail", sessione.email) : riga("Nome", profilo?.nome ?? "Profilo locale")}
             {!cloud && riga("Codice fiscale", profilo?.codiceFiscale)}
             {!cloud && riga("Nascita", profilo?.nascita)}
             {!cloud && riga("Residenza", profilo?.residenza)}
             {!cloud && riga("Telefono", profilo?.telefono)}
-            {riga("Accesso", cloud ? "Account con e-mail e password: i tuoi dati li vedi solo tu"
-              : sessione.modo === "demo" ? "Demo senza account: nulla viene salvato"
-              : "Installazione locale, senza login")}
+            {riga("Accesso", cloud ? "Account con e-mail e password: i tuoi dati li vedi solo tu" : "Installazione locale, senza login")}
+            {cloud && riga("Sincronizzazione", "Stessi dati su ogni dispositivo in cui accedi")}
             {riga("Valuta", "EUR")}
             {riga("Formato data", "GG/MM/AAAA")}
           </dl>
@@ -68,18 +67,15 @@ export default function ImpostazioniPage() {
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <a href="/api/export" download className="btn"><Download className="size-4" aria-hidden /> Esporta in JSON</a>
-            {sessione.modo !== "demo" && (
-              <>
-                <button type="button" className="btn" onClick={() => setConfirming("demo")}>
-                  <RotateCcw className="size-4" aria-hidden /> Carica dati di esempio
-                </button>
-                <button type="button" className="btn" onClick={() => setConfirming("vuoto")}>
-                  <Eraser className="size-4" aria-hidden /> Svuota archivio
-                </button>
-              </>
+            {!cloud && (
+              <button type="button" className="btn" onClick={() => setConfirming("demo")}>
+                <RotateCcw className="size-4" aria-hidden /> Carica dati di esempio
+              </button>
             )}
+            <button type="button" className="btn" onClick={() => setConfirming("vuoto")}>
+              <Eraser className="size-4" aria-hidden /> Svuota archivio
+            </button>
           </div>
-          {sessione.modo === "demo" && <p className="mt-3 text-sm text-muted">Nella demo i dati sono sempre quelli di esempio: crea un account per usare i tuoi.</p>}
         </Section>
 
         <Section title="Funzioni non ancora disponibili">

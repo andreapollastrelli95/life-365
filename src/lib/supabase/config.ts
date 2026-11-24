@@ -9,5 +9,3 @@ export const CLOUD_ENABLED = Boolean(SUPABASE_URL && SUPABASE_KEY);
 /** Bucket privato dei file caricati: ogni utente ha la sua cartella `<user_id>/`. */
 export const BUCKET_ALLEGATI = "life365-allegati";
 
-/** Cookie che apre la demo senza account (dati finti, nessun salvataggio). */
-export const DEMO_COOKIE = "life365-demo";
