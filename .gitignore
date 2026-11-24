@@ -1,0 +1,24 @@
+# segreti e ambiente
+.env*
+
+# dipendenze e build
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# dati locali
+/data/
+
+# strumenti locali (Node portabile)
+.tools/
+
+# log e varie
+*.log
+.DS_Store
+coverage/
+
+.vercel
+.env*
