@@ -1,0 +1,6 @@
+/data
+/stampa
+/tests
+/tools
+.env*
+*.log

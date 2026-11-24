@@ -180,6 +180,8 @@ export function UploadCard({ fixedDestinazione }: { fixedDestinazione?: string }
             <p className="text-xs text-muted">
               {dest?.crea === "documenti"
                 ? "Crea una scheda in Documenti: numero e scadenza si completano lì."
+                : sessione.modo === "cloud" ? "I file vanno nel tuo spazio privato: li vedi solo tu."
+                : sessione.modo === "demo" ? "Nella demo i file non vengono salvati."
                 : "I file restano sul tuo PC, nella cartella data\\allegati."}
             </p>
             <button type="button" className="btn btn-primary" disabled={busy || files.length === 0 || !dest} onClick={submit}>
