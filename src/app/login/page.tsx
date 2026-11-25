@@ -88,7 +88,7 @@ function LoginForm() {
       <div className="card w-full max-w-sm space-y-5 p-6">
         <div>
           <Logo />
-          <p className="mt-1 text-sm text-muted">Finanze, documenti, casa, salute e scadenze: la tua vita in ordine, tutto l&apos;anno.</p>
+          <p className="mt-1 text-center text-sm text-muted">Finanze, documenti, casa, salute e scadenze: la tua vita in ordine, tutto l&apos;anno.</p>
         </div>
 
         <form onSubmit={submit} className="space-y-4">

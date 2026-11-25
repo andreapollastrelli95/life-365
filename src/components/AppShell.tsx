@@ -8,6 +8,7 @@ import { useState, type ReactNode } from "react";
 import { isDemo } from "@/lib/types";
 import { useData } from "./DataProvider";
 import { GlobalSearch } from "./GlobalSearch";
+import { LogoMark } from "./Logo";
 import { NAV } from "./nav";
 import { Notifications } from "./Notifications";
 
@@ -66,7 +67,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex min-h-0 flex-1">
         <aside className={`hidden shrink-0 flex-col bg-night-900 transition-[width] md:flex ${collapsed ? "w-16" : "w-64"}`}>
           <div className={`flex h-14 items-center px-3 ${collapsed ? "justify-center" : "justify-between"}`}>
-            {!collapsed && <span className="text-lg font-extrabold tracking-tight text-white">LIFE <span className="bg-gradient-to-r from-[#ff6b6b] via-[#ffd93d] to-[#a78bfa] bg-clip-text text-transparent">365</span></span>}
+            {!collapsed && <span className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-lg bg-white"><LogoMark size={34} /></span><span className="text-lg font-extrabold tracking-tight text-white">LIFE 365</span></span>}
             <button type="button" onClick={() => setCollapsed((c) => !c)}
               className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-white/70 hover:bg-night-800 hover:text-white"
               aria-label={collapsed ? "Espandi menu" : "Comprimi menu"} aria-expanded={!collapsed}>
@@ -81,7 +82,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <button type="button" aria-label="Chiudi menu" className="absolute inset-0 bg-night-950/55" onClick={() => setMobileOpen(false)} />
             <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85%] flex-col bg-night-900">
               <div className="flex h-14 items-center justify-between px-3">
-                <span className="text-lg font-extrabold tracking-tight text-white">LIFE <span className="bg-gradient-to-r from-[#ff6b6b] via-[#ffd93d] to-[#a78bfa] bg-clip-text text-transparent">365</span></span>
+                <span className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-lg bg-white"><LogoMark size={34} /></span><span className="text-lg font-extrabold tracking-tight text-white">LIFE 365</span></span>
                 <button type="button" onClick={() => setMobileOpen(false)} aria-label="Chiudi menu"
                   className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-white/70 hover:bg-night-800">
                   <X className="size-4" aria-hidden />
