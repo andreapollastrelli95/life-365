@@ -75,6 +75,19 @@ if (!CLOUD) {
   await caricaFile(page, "estratto-prova.pdf");
   await go(page, "/archivio");
   check("file caricato in locale", await page.getByText("estratto prova").first().isVisible());
+
+  // Importazione: esporto, aggiungo un documento riconoscibile, reimporto dal pannello Impostazioni.
+  const esportato = await (await page.request.get(BASE + "/api/export")).json();
+  esportato.documenti.push({ id: "import-e2e", createdAt: "x", updatedAt: "x", titolo: "Documento importato e2e", categoria: "Altri" });
+  const dir = mkdtempSync(join(tmpdir(), "l365-imp-"));
+  writeFileSync(join(dir, "archivio.json"), JSON.stringify(esportato));
+  await go(page, "/impostazioni");
+  await page.getByLabel("1. File dei dati (.json)").setInputFiles(join(dir, "archivio.json"));
+  await page.getByRole("button", { name: "Importa" }).click();
+  await modal(page).getByRole("button", { name: "Importa" }).click();
+  await toast(page, "Importati");
+  await go(page, "/documenti");
+  check("archivio importato", await page.getByText("Documento importato e2e").first().isVisible());
 }
 
 // ------------------------------------------------------------ cloud

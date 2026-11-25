@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { deleteRecord, patchRecord, resetDemoData, saveRecord } from "@/lib/data";
+import { importaArchivio } from "@/lib/data/importa-server";
 import { deleteAllegato, registraCaricati, type FileCaricato, type UploadOptions } from "@/lib/data/allegati";
 import { COLLECTION_KEYS, type CollectionKey } from "@/lib/types";
 import { COLLECTIONS } from "@/modules/collections";
@@ -86,5 +87,15 @@ export async function registraAllegatiAction(files: FileCaricato[], opt: UploadO
     if (!result.ok) return result;
     refresh();
     return { ok: true, count: result.count };
+  });
+}
+
+/** Importa un archivio esportato da LIFE OS o LIFE 365 nell'archivio dell'utente. */
+export async function importaAction(testo: string): Promise<ActionResult & { record?: number; fileCollegati?: number; fileMancanti?: number }> {
+  return guarded(async () => {
+    const result = await importaArchivio(testo);
+    if (!result.ok) return result;
+    refresh();
+    return result;
   });
 }

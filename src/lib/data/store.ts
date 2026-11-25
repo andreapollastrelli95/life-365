@@ -148,24 +148,29 @@ export async function withDb<T>(fn: (db: Db) => { db?: Db; result: T }): Promise
   }
 }
 
-/** Sostituisce l'archivio con i dati demo o con un archivio vuoto, dopo una copia di sicurezza. */
-export async function resetDb(tipo: "demo" | "vuoto" = "demo"): Promise<void> {
-  const nuovo = () => (tipo === "demo" ? createSeed(todayISO()) : createEmpty(todayISO()));
+/** Sostituisce l'intero archivio con `nuovo`, dopo una copia di sicurezza di quello attuale. */
+export async function replaceDb(nuovo: Db): Promise<void> {
   const s = await getSessione();
   switch (s.modo) {
     case "locale":
       return enqueue(async () => {
         await backupFile();
-        await writeFileAtomic(nuovo());
+        await writeFileAtomic(validate(nuovo));
       });
     case "cloud": {
-      // Nel cloud niente dati inventati: si può solo ripartire da un archivio vuoto.
-      if (tipo === "demo") throw new Error("Dati di esempio non disponibili negli account.");
       const { db, versione } = await readCloudRow(s);
       await backupCloud(s, db);
-      if (!(await writeCloudRow(s, nuovo(), versione))) throw new Error("Archivio modificato nel frattempo. Riprova.");
+      if (!(await writeCloudRow(s, validate(nuovo), versione))) throw new Error("Archivio modificato nel frattempo. Riprova.");
       return;
     }
     case "anonimo": throw new AccessoRichiestoError();
   }
+}
+
+/** Sostituisce l'archivio con i dati demo (solo locale) o con un archivio vuoto. */
+export async function resetDb(tipo: "demo" | "vuoto" = "demo"): Promise<void> {
+  const s = await getSessione();
+  // Negli account niente dati inventati: si può solo ripartire da un archivio vuoto.
+  if (s.modo === "cloud" && tipo === "demo") throw new Error("Dati di esempio non disponibili negli account.");
+  return replaceDb(tipo === "demo" ? createSeed(todayISO()) : createEmpty(todayISO()));
 }

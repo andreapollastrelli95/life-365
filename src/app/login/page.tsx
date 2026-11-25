@@ -1,21 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { CLOUD_ENABLED } from "@/lib/supabase/config";
 
 type Modo = "accedi" | "registrati" | "recupera";
 
+const AVVISI: Record<string, { ok: boolean; text: string }> = {
+  confermato: { ok: true, text: "Indirizzo e-mail confermato. Ora accedi con la tua password." },
+  "link-scaduto": { ok: false, text: "Il link è scaduto o è già stato usato. Accedi, oppure chiedi un nuovo link." },
+};
+
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const avviso = useSearchParams().get("avviso");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modo, setModo] = useState<Modo>("accedi");
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(avviso ? AVVISI[avviso] ?? null : null);
 
   if (!CLOUD_ENABLED) {
     return (
@@ -39,14 +53,14 @@ export default function LoginPage() {
     const sb = getBrowserClient();
     try {
       if (modo === "registrati") {
-        const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/login` } });
+        const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/` } });
         if (error) throw error;
         if (!data.session) setMsg({ ok: true, text: "Account creato. Apri l'e-mail di conferma che ti abbiamo inviato, poi accedi qui." });
         else entra();
       } else if (modo === "recupera") {
-        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/login` });
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/auth/callback?next=/impostazioni%23password` });
         if (error) throw error;
-        setMsg({ ok: true, text: "Se l'indirizzo è registrato riceverai un'e-mail con il link per entrare e cambiare la password." });
+        setMsg({ ok: true, text: "Se l'indirizzo è registrato riceverai un'e-mail: apri il link da questo dispositivo e scegli la nuova password in Impostazioni." });
       } else {
         const { error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;

@@ -242,12 +242,98 @@ def retro(c, url):
     c.drawImage(qr_immagine(url), W - sinistra - lato - 3 * mm, base - 1 * mm, lato, lato)
 
 
+PASSI_ISTRUZIONI = [
+    ("Apri LIFE 365", [
+        "Inquadra il QR con la fotocamera del telefono e tocca il link che compare.",
+    ]),
+    ("Crea il tuo account (solo la prima volta)", [
+        "Tocca «Crea un account gratuito», scrivi la tua e-mail e una password di almeno",
+        "8 caratteri. Scrivi la password qui sotto o in un posto sicuro.",
+    ]),
+    ("Conferma l'e-mail", [
+        "Ti arriva un'e-mail: aprila dallo stesso telefono e tocca il link di conferma.",
+        "Se non la trovi, guarda anche nella cartella Spam o Posta indesiderata.",
+    ]),
+    ("Mettila tra le app", [
+        "iPhone (Safari): tasto Condividi, poi «Aggiungi alla schermata Home».",
+        "Android (Chrome): menu con i tre puntini, poi «Aggiungi a schermata Home».",
+    ]),
+    ("Usala da qualsiasi dispositivo", [
+        "Su tablet o computer entra con la stessa e-mail e password: i dati sono sempre",
+        "gli stessi. Se due persone usano lo stesso account, vedono gli stessi dati.",
+    ]),
+    ("Per cominciare", [
+        "Finanze: aggiungi il conto e le spese. Documenti: carta d'identità e patente con",
+        "la scadenza. Lo Scadenziario e il campanello ti avvisano prima che scadano.",
+    ]),
+    ("Password dimenticata?", [
+        "Nella pagina di accesso tocca «Password dimenticata?»: apri l'e-mail dallo stesso",
+        "telefono e scegli la nuova password in Impostazioni › Cambia password.",
+    ]),
+]
+
+
+def istruzioni(c, url):
+    cornice(c)
+    testo_arcobaleno(c, "Benvenuti in LIFE 365", W / 2, H - 46 * mm, "Nero", 26)
+    centrato(c, "Un regalo per tenere in ordine conti, documenti, casa e scadenze.", H - 53 * mm, "Testo", 11, MUTED)
+
+    lato = 32 * mm
+    qy = 74 * mm
+    c.drawImage(qr_immagine(url), 34 * mm, qy, lato, lato)
+    c.setFillColor(NOTTE)
+    c.setFont("Grassetto", 13)
+    c.drawString(34 * mm + lato + 6 * mm, qy + lato / 2 + 3 * mm, "Inquadra per aprire LIFE 365")
+    c.setFont("Testo", 11)
+    c.setFillColor(INK)
+    c.drawString(34 * mm + lato + 6 * mm, qy + lato / 2 - 4 * mm, url.replace("https://", ""))
+
+    x, y = 34 * mm, H - 64 * mm
+    for i, (titolo, righe) in enumerate(PASSI_ISTRUZIONI):
+        c.setFillColor(colore_a(i / (len(PASSI_ISTRUZIONI) - 1)))
+        c.circle(x + 3.2 * mm, y + 1.3 * mm, 3.6 * mm, stroke=0, fill=1)
+        c.setFillColor(white)
+        c.setFont("Grassetto", 10.5)
+        c.drawCentredString(x + 3.2 * mm, y - 0.2 * mm, str(i + 1))
+        c.setFillColor(NOTTE)
+        c.setFont("Grassetto", 12)
+        c.drawString(x + 10 * mm, y, titolo)
+        c.setFillColor(INK)
+        c.setFont("Testo", 10)
+        for k, r in enumerate(righe):
+            c.drawString(x + 10 * mm, y - (5 + 4.2 * k) * mm, r)
+        y -= (5 + 4.2 * len(righe) + 3.8) * mm
+        assert y > 110 * mm, f"istruzioni troppo lunghe al passo {titolo}"
+
+    # Promemoria da compilare a mano.
+    box_y = 40 * mm
+    c.setFillColor(HexColor("#f4f6fa"))
+    c.roundRect(34 * mm, box_y, W - 68 * mm, 28 * mm, 4 * mm, stroke=0, fill=1)
+    c.setFillColor(NOTTE)
+    c.setFont("Grassetto", 11)
+    c.drawString(39 * mm, box_y + 20 * mm, "Il mio accesso")
+    c.setFont("Testo", 10.5)
+    c.setFillColor(INK)
+    c.drawString(39 * mm, box_y + 12 * mm, "E-mail:")
+    c.drawString(39 * mm, box_y + 4.5 * mm, "Password:")
+    c.setStrokeColor(MUTED)
+    c.setLineWidth(0.5)
+    c.line(57 * mm, box_y + 11.5 * mm, W - 40 * mm, box_y + 11.5 * mm)
+    c.line(60 * mm, box_y + 4 * mm, W - 40 * mm, box_y + 4 * mm)
+    c.setFont("Testo", 8.5)
+    c.setFillColor(MUTED)
+    c.drawCentredString(W / 2, box_y - 4.5 * mm, "Gli altri utenti dell'app non vedono i tuoi dati. Conserva questo foglio in un posto sicuro.")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", required=True)
     ap.add_argument("--out", default="stampa/volantino.pdf")
+    ap.add_argument("--istruzioni", default="stampa/istruzioni.pdf")
     a = ap.parse_args()
-    os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
+    for out in (a.out, a.istruzioni):
+        os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+
     c = canvas.Canvas(a.out, pagesize=A4)
     c.setTitle("LIFE 365 - volantino")
     c.setAuthor("LIFE 365")
@@ -257,6 +343,14 @@ def main():
     c.showPage()
     c.save()
     print("scritto", a.out)
+
+    c = canvas.Canvas(a.istruzioni, pagesize=A4)
+    c.setTitle("LIFE 365 - istruzioni")
+    c.setAuthor("LIFE 365")
+    istruzioni(c, a.url)
+    c.showPage()
+    c.save()
+    print("scritto", a.istruzioni)
 
 
 if __name__ == "__main__":

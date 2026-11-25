@@ -4,6 +4,8 @@ import { Download, Eraser, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { resetAction } from "@/app/actions";
 import { useData } from "@/components/DataProvider";
+import { CambiaPassword } from "@/components/CambiaPassword";
+import { ImportaArchivio } from "@/components/ImportaArchivio";
 import { useToast } from "@/components/Toast";
 import { ComingSoon, Modal, PageHeader, Section } from "@/components/ui";
 import { formatDate } from "@/lib/domain/dates";
@@ -78,10 +80,21 @@ export default function ImpostazioniPage() {
           </div>
         </Section>
 
+        <Section title="Importa archivio">
+          <ImportaArchivio />
+        </Section>
+
+        {cloud && (
+          <section id="password" className="scroll-mt-4">
+            <Section title="Cambia password">
+              <CambiaPassword />
+            </Section>
+          </section>
+        )}
+
         <Section title="Funzioni non ancora disponibili">
           <div className="flex flex-wrap gap-2">
             <ComingSoon label="Report PDF" />
-            <ComingSoon label="Importazione da JSON" />
             <ComingSoon label="Categorie personalizzate" />
             <ComingSoon label="Notifiche configurabili" />
             <ComingSoon label="Accesso dell'assistente ai dati sanitari" />
