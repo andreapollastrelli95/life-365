@@ -13,7 +13,7 @@ Gestionale personale in italiano per tenere in ordine, tutto l'anno, finanze, do
 - **Casa, auto, salute, abbonamenti, beni, agenda, viaggi, rubrica:** ogni sezione con tabella, ricerca, filtri, ordinamento e modulo di inserimento validato.
 - **Patrimonio e futuro:** attività meno passività senza doppi conteggi, investimenti, obiettivi.
 - **Il mio anno:** riepilogo annuale con confronto sull'anno precedente.
-- **Assistente:** risposte calcolate sui propri dati per un elenco di domande pronte (nessun servizio esterno).
+- **Assistente AI:** domande libere e dibattiti tra agenti AI sui propri dati, con la propria chiave Gemini (anche gratuita), più domande pronte calcolate senza AI.
 - Ricerca globale, esportazione dei dati in JSON, vista ottimizzata per telefono e installabile nella schermata Home.
 
 ## Come funziona
