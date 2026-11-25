@@ -175,7 +175,7 @@ FUNZIONI = [
     ("Rubrica", "Familiari, amici e professionisti, con i compleanni nello scadenziario."),
     ("Patrimonio e futuro", "Attività meno passività senza doppi conteggi, investimenti e obiettivi di risparmio."),
     ("Il mio anno", "Il riepilogo dell'anno scelto, confrontato con l'anno precedente."),
-    ("Assistente", "Risposte immediate su spese, risparmio, abbonamenti e documenti in scadenza, calcolate sui tuoi dati."),
+    ("Assistente AI", "Domande libere e dibattiti tra agenti AI sui tuoi dati, con la tua chiave Gemini (anche gratuita)."),
     ("Ricerca e tabelle", "Ricerca in tutti i moduli; in ogni tabella filtri, ordinamento, inserimento e modifica."),
     ("Un account, ogni dispositivo", "Accedi con e-mail e password: i dati restano sincronizzati ovunque. Esportali quando vuoi."),
 ]
