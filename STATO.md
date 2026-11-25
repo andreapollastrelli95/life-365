@@ -13,10 +13,15 @@ Sito: https://life-365-app.vercel.app. Si entra solo con un account (niente demo
   - Dati ritrovati da un secondo dispositivo a 390 px, senza scorrimento orizzontale.
   - L'utente B non vede documenti, file né esportazione dell'utente A.
 - **Attacchi diretti alle API di Supabase**, senza passare dall'app: 9 su 9 respinti. B non legge, modifica né crea righe di A; senza accesso non si legge nulla; B non scarica né firma i file di A, non scrive nella sua cartella; il bucket non è pubblico.
-- **Modalità locale** (senza Supabase): 11 controlli su 11; typecheck, lint e 12 test unitari.
+- **Modalità locale** (senza Supabase): 12 controlli su 12, compresa l'importazione di un archivio; typecheck, lint e 16 test unitari, di cui 4 sull'importazione.
+- **Ritorno dai link delle e-mail** (`/auth/callback`): senza codice o con un codice falso si torna al login con l'avviso; un rimando verso un altro sito viene ignorato.
+- **Foglio di istruzioni** (`stampa/istruzioni.pdf`): QR letto.
 - **Volantino** (`stampa/volantino.pdf`): QR di fronte e retro letti, portano a https://life-365-app.vercel.app; nessuna menzione della demo.
 
 ## Non verificato
+
+- **Importazione nel cloud con i file** (Impostazioni › Importa archivio): la parte sui dati è coperta da test, il trasferimento dei file usa lo stesso canale già collaudato per i caricamenti, ma il percorso completo su un account reale non è ancora stato eseguito.
+- **Cambia password** e **Password dimenticata** con un'e-mail vera.
 
 - **E-mail vere di conferma e di recupero password**: il progetto richiede la conferma dell'indirizzo; gli utenti di prova sono stati creati già confermati. Il mittente è quello predefinito di Supabase, che invia poche e-mail all'ora.
 - **Link di conferma aperto su un dispositivo diverso** da quello della registrazione: l'indirizzo risulta confermato, ma poi bisogna accedere a mano.
